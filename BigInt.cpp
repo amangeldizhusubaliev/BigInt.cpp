@@ -84,6 +84,9 @@ BigInt BigInt::multiplication(const BigInt& a, const BigInt& b) {
 }
 
 std::pair<BigInt, BigInt> BigInt::division(const BigInt& a, const BigInt& b) {
+    if (b == 0) {
+        throw std::runtime_error("BigInt::division divisor cannot be zero");
+    }
     BigInt p, q = BigInt(b, false), r;
     r.numVec.resize(0);
     size_t ptr = a.numVec.size() - 1;
@@ -225,6 +228,9 @@ BigInt& BigInt::operator*=(const int32_t& b) {
 }
 
 BigInt& BigInt::operator/=(const int32_t& b) {
+    if (b == 0) {
+        throw std::runtime_error("BigInt operator/= const int32_t& cannot be zero");
+    }
     int64_t carry = 0;
     for (size_t i = this->numVec.size() - 1; i >= 0; i--) {
         carry = this->numVec[i] + carry * base;
@@ -239,6 +245,9 @@ BigInt& BigInt::operator/=(const int32_t& b) {
 }
 
 int32_t BigInt::operator%(const int32_t& b) {
+    if (b == 0) {
+        throw std::runtime_error("BigInt operator% const int32_t& cannot be zero");
+    }
     int32_t r = 0;
     for (size_t i = this->numVec.size() - 1; i >= 0; i--) {
         r = (r * 1LL * base + this->numVec[i]) % b;

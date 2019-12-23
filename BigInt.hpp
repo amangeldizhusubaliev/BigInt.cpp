@@ -72,14 +72,14 @@ public:
         return *this;
     }
 
-    BigInt& operator*=(const int64_t& b);
+    BigInt& operator*=(const int32_t& b);
 
     inline BigInt& operator/=(const BigInt& b) {
         *this = BigInt::division(*this, b).first;
         return *this;
     }
 
-    BigInt& operator/=(const int64_t& b);
+    BigInt& operator/=(const int32_t& b);
 
     inline BigInt& operator%=(const BigInt& b) {
         *this = BigInt::division(*this, b).second;
@@ -119,7 +119,7 @@ public:
         return r;
     }
 
-    int64_t operator%(const int64_t& b);
+    int32_t operator%(const int32_t& b);
 };
 
 /// input/output operators

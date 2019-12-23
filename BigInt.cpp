@@ -209,13 +209,13 @@ BigInt& BigInt::operator-=(const BigInt& b) {
     return *this;
 }
 
-BigInt& BigInt::operator*=(const int64_t& b) {
+BigInt& BigInt::operator*=(const int32_t& b) {
     int64_t carry = 0;
     for (size_t i = 0; i < this->numVec.size() || carry; i++) {
         if (i == this->numVec.size()) {
             this->numVec.emplace_back(0);
         }
-        carry += this->numVec[i] * b;
+        carry += this->numVec[i] * 1LL * b;
         this->numVec[i] = carry % base;
         carry /= base;
     }
@@ -224,7 +224,7 @@ BigInt& BigInt::operator*=(const int64_t& b) {
     return *this;
 }
 
-BigInt& BigInt::operator/=(const int64_t& b) {
+BigInt& BigInt::operator/=(const int32_t& b) {
     int64_t carry = 0;
     for (size_t i = this->numVec.size() - 1; i >= 0; i--) {
         carry = this->numVec[i] + carry * base;
@@ -238,10 +238,10 @@ BigInt& BigInt::operator/=(const int64_t& b) {
     return *this;
 }
 
-int64_t BigInt::operator%(const int64_t& b) {
-    int64_t r = 0;
+int32_t BigInt::operator%(const int32_t& b) {
+    int32_t r = 0;
     for (size_t i = this->numVec.size() - 1; i >= 0; i--) {
-        r = (r * base + this->numVec[i]) % b;
+        r = (r * 1LL * base + this->numVec[i]) % b;
         if (i == 0) {
             break;
         }

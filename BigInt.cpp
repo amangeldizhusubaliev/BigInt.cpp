@@ -1,5 +1,7 @@
 #include "BigInt.hpp"
 
+const int32_t BigInt::base = 1000000000;
+
 /// helper functions
 std::string BigInt::toString() {
     std::stringstream ss;
@@ -24,8 +26,8 @@ BigInt BigInt::unsignedAddition(const BigInt& a, const BigInt& b) {
     int32_t carry = 0;
     for (size_t i = 0; carry > 0 || i < a.numVec.size() || i < b.numVec.size(); i++) {
         carry += (i < a.numVec.size() ? a.numVec[i] : 0) + (i < b.numVec.size() ? b.numVec[i] : 0);
-        res.numVec.emplace_back(carry % base);
-        carry /= base;
+        res.numVec.emplace_back(carry % BigInt::base);
+        carry /= BigInt::base;
     }
     return res;
 }
@@ -55,7 +57,7 @@ BigInt BigInt::unsignedSubtraction(const BigInt& a, const BigInt& b) {
     for (size_t i = 0; carry != 0 || i < a.numVec.size(); i++) {
         carry += (i < a.numVec.size() ? a.numVec[i] : 0) - (i < b.numVec.size() ? b.numVec[i] : 0);
         if (carry < 0) {
-            res.numVec.emplace_back(carry + base);
+            res.numVec.emplace_back(carry + BigInt::base);
             carry = -1;
         } else {
             res.numVec.emplace_back(carry);
@@ -73,8 +75,8 @@ BigInt BigInt::multiplication(const BigInt& a, const BigInt& b) {
         int64_t carry = 0;
         for (size_t j = 0; j < b.numVec.size() || carry > 0; j++) {
             carry += r.numVec[i + j] + a.numVec[i] * 1LL * (j < b.numVec.size() ? b.numVec[j] : 0);
-            r.numVec[i + j] = int32_t(carry % base);
-            carry /= base;
+            r.numVec[i + j] = int32_t(carry % BigInt::base);
+            carry /= BigInt::base;
         }
     }
     r.isNegativeVar = a.isNegativeVar != b.isNegativeVar;
@@ -91,18 +93,18 @@ std::pair<BigInt, BigInt> BigInt::division(const BigInt& a, const BigInt& b) {
     r.numVec.resize(0);
     size_t ptr = a.numVec.size() - 1;
     while (ptr >= 0 && ptr < a.numVec.size()) {
-        p *= base;
+        p *= BigInt::base;
         p += a.numVec[ptr--];
         while (p < q && ptr >= 0 && ptr < a.numVec.size()) {
             r.numVec.emplace_back(0);
-            p *= base;
+            p *= BigInt::base;
             p += a.numVec[ptr--];
         }
         if (p < q) {
             r.numVec.emplace_back(0);
             break;
         }
-        int32_t L = 1, R = base; 
+        int32_t L = 1, R = BigInt::base; 
         while (L < R) {
             int32_t M = (L + R + 1) >> 1;
             if (q * M <= p) {
@@ -135,11 +137,11 @@ BigInt::BigInt(int64_t num) {
         isNegativeVar = true;
         num *= -1;
     }
-    numVec.emplace_back(int32_t(num % base));
-    num /= base;
+    numVec.emplace_back(int32_t(num % BigInt::base));
+    num /= BigInt::base;
     if (num > 0) {
-        numVec.emplace_back(int32_t(num % base));
-        num /= base;
+        numVec.emplace_back(int32_t(num % BigInt::base));
+        num /= BigInt::base;
         if (num > 0) {
             numVec.emplace_back(int32_t(num));
         }
@@ -219,8 +221,8 @@ BigInt& BigInt::operator*=(const int32_t& b) {
             this->numVec.emplace_back(0);
         }
         carry += this->numVec[i] * 1LL * b;
-        this->numVec[i] = carry % base;
-        carry /= base;
+        this->numVec[i] = carry % BigInt::base;
+        carry /= BigInt::base;
     }
     removeLeadingZeroes();
     checkZeroSign();
@@ -233,7 +235,7 @@ BigInt& BigInt::operator/=(const int32_t& b) {
     }
     int64_t carry = 0;
     for (size_t i = this->numVec.size() - 1; i >= 0; i--) {
-        carry = this->numVec[i] + carry * base;
+        carry = this->numVec[i] + carry * BigInt::base;
         this->numVec[i] = carry / b;
         carry %= b;
         if (i == 0) {
@@ -250,7 +252,7 @@ int32_t BigInt::operator%(const int32_t& b) {
     }
     int32_t r = 0;
     for (size_t i = this->numVec.size() - 1; i >= 0; i--) {
-        r = (r * 1LL * base + this->numVec[i]) % b;
+        r = (r * 1LL * BigInt::base + this->numVec[i]) % b;
         if (i == 0) {
             break;
         }

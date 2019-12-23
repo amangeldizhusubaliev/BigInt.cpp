@@ -14,7 +14,7 @@ class BigInt {
     bool isNegativeVar;
 
 public:
-    const static int32_t base = 1000000000;
+    const static int32_t base;
 
     /// helper functions
     inline void removeLeadingZeroes() {

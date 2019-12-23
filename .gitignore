@@ -1,0 +1,7 @@
+*.exe
+*.o
+*.gch
+test.cpp
+onefile.cpp
+main.cpp
+
